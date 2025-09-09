@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -17,6 +19,15 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        // Чтение API ключа из develop.properties
+        val apiKeyPropertiesFile = rootProject.file("develop.properties")
+        val apiKeyProperties = Properties().apply {
+            load(apiKeyPropertiesFile.inputStream())
+        }
+        val spoonacularApiKey = apiKeyProperties.getProperty("SPOONACULAR_API_KEY", "")
+
+        buildConfigField("String", "SPOONACULAR_API_KEY", "\"$spoonacularApiKey\"")
     }
 
     buildTypes {
