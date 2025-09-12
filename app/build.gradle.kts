@@ -75,6 +75,7 @@ kotlin {
 dependencies {
 
     // ksp(libs.ksp)
+    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:${libs.versions.detectVersion.get()}")
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
