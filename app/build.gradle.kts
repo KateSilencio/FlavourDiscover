@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.google.devtools.ksp) apply false
+    alias(libs.plugins.detekt)
 }
 
 android {
@@ -48,7 +49,16 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
+}
+
+detekt {
+    toolVersion = libs.versions.detectVersion.get()
+    config.from("${project.rootDir}/config/detekt.yml")
+    buildUponDefaultConfig = true
+    allRules = false
+    source.from("src/main/java", "src/main/kotlin")
 }
 
 kotlin {
