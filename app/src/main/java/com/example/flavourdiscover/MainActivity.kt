@@ -27,7 +27,18 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+        testFunction(1,2,3,4,5,6)
+
     }
+}
+
+// Нарушение 1: Длинный список параметров
+fun testFunction(a: Int, b: Int, c: Int, d: Int, e: Int, f: Int) {
+    // Нарушение 2: TODO комментарий
+    TODO("Это нужно доделать позже")
+
+    // Нарушение 3: Неиспользуемый параметр
+    val unused = "не используется"
 }
 
 @Composable
