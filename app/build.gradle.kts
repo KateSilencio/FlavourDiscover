@@ -59,6 +59,13 @@ detekt {
     buildUponDefaultConfig = true
     allRules = false
     source.from("src/main/java", "src/main/kotlin")
+
+    autoCorrect = false
+
+}
+
+tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
+    jvmTarget = "11"
 }
 
 kotlin {
