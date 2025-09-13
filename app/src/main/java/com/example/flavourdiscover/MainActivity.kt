@@ -27,7 +27,14 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+        testBrokenFunction()
+
     }
+}
+
+fun testBrokenFunction() {
+    TODO("This will make detekt fail")
+    val unused = "unused variable" // Вызовет предупреждение
 }
 
 @Composable
