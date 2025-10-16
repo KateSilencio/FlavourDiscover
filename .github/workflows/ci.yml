@@ -37,6 +37,12 @@ jobs:
       - name: Make gradlew executable
         run: chmod +x gradlew
 
+      # Создаем develop.properties из Secrets
+      - name: Create develop.properties
+        run: |
+          echo "SPOONACULAR_API_KEY=${{ secrets.SPOONACULAR_API_KEY }}" > develop.properties   
+          cat develop.properties
+
       # Шаг 5: Запуск Detekt
       - name: Run Detekt
         run: ./gradlew detekt
