@@ -1,0 +1,123 @@
+build:
+  maxIssues: 10
+  weights:
+    complexity: 2
+    style: 1
+    performance: 2
+  excludes: |
+    **/build/**
+    **/theme/**
+    **/test/**
+    **/androidTest/**
+    **/Generated.kt
+    **/*Test.kt
+    **/*Spec.kt
+
+complexity:
+  active: true
+  LongParameterList:
+    active: true
+    functionThreshold: 5  # Заменено с threshold
+    constructorThreshold: 5  # Новый параметр
+  CyclomaticComplexMethod:  # Переименовано с ComplexMethod
+    active: true
+    threshold: 10
+
+style:
+  active: true
+  ForbiddenComment:
+    active: true
+    comments: ['TODO', 'FIXME', 'STOPSHIP']  # Заменено с values
+  MagicNumber:
+    active: true
+    ignoreNumbers: ['-1', '0', '1', '2', '100']
+  NewLineAtEndOfFile:
+    active: true
+  OptionalUnit:
+    active: true
+  UnusedPrivateMember:
+        active: true
+        allowedNames: '(_|ignored|expected|serialVersionUID|commonMain|commonTest|androidMain|androidTest|iosMain|iosTest)'
+        ignoreAnnotated: [ 'Preview', 'LightDarkPreviews' ]
+
+empty-blocks:
+  active: true
+  EmptyCatchBlock:
+    active: true
+
+potential-bugs:
+  active: true
+  UnsafeCallOnNullableType:
+    active: true
+
+formatting:  # Секция formatting теперь подключается через плагин
+  active: true
+  TrailingWhitespace:
+    active: true
+  MaximumLineLength:
+    active: true
+    maxLineLength: 120
+    
+# Правила для регулирования работы с исключениями.
+exceptions:
+    active: true
+    ExceptionRaisedInUnexpectedLocation:
+        active: true
+        methodNames: [ toString, hashCode, equals, finalize ]
+    InstanceOfCheckForException:
+        active: true
+        excludes: [ '**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**' ]
+    # Выключено, потому что иногда бывает необходимость оставить тудушки в качестве реализации
+    NotImplementedDeclaration:
+        active: false
+    ObjectExtendsThrowable:
+        active: true
+    PrintStackTrace:
+        active: true
+    # Выключено, потому что мы иногда бросаем исключения из catch-блоков, чтобы их отловить позже
+    RethrowCaughtException:
+        active: false
+    ReturnFromFinally:
+        active: true
+        ignoreLabeled: false
+    SwallowedException:
+        active: true
+        ignoredExceptionTypes:
+            - InterruptedException
+            - NumberFormatException
+            - ParseException
+            - MalformedURLException
+        allowedExceptionNameRegex: '_|(ignore|expected|ignored).*'
+    ThrowingExceptionFromFinally:
+        active: true
+    ThrowingExceptionInMain:
+        active: false
+    ThrowingExceptionsWithoutMessageOrCause:
+        active: true
+        exceptions:
+            - IllegalArgumentException
+            - IllegalStateException
+            - IOException
+        excludes: [ '**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**' ]
+    ThrowingNewInstanceOfSameException:
+        active: true
+    TooGenericExceptionCaught:
+        active: true
+        exceptionNames:
+            - ArrayIndexOutOfBoundsException
+            - Error
+            - Exception
+            - IllegalMonitorStateException
+            - NullPointerException
+            - IndexOutOfBoundsException
+            - RuntimeException
+            - Throwable
+        allowedExceptionNameRegex: '_|(ignore|expected|ignored).*'
+        excludes: [ '**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**' ]
+    TooGenericExceptionThrown:
+        active: true
+        exceptionNames:
+            - Error
+            - Exception
+            - Throwable
+            - RuntimeException

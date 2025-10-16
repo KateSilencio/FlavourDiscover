@@ -1,0 +1,71 @@
+name: Android CI
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Шаг 1: Получение кода
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Шаг 2: Установка JDK
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      # Шаг 3: Кэширование зависимостей Gradle
+      - name: Cache Gradle dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      # Шаг 4: Даем права на выполнение gradlew
+      - name: Make gradlew executable
+        run: chmod +x gradlew
+
+      # Создаем develop.properties из Secrets
+      - name: Create develop.properties
+        run: |
+          echo "SPOONACULAR_API_KEY=${{ secrets.SPOONACULAR_API_KEY }}" > develop.properties   
+          cat develop.properties
+
+      # Шаг 5: Запуск Detekt
+      - name: Run Detekt
+        run: ./gradlew detekt
+
+      # Шаг 6: Сборка проекта
+      - name: Build project
+        run: ./gradlew assembleDebug
+
+      # Шаг 7: Запуск тестов
+      - name: Run tests
+        run: ./gradlew testDebugUnitTest
+
+      # Шаг 8: Запуск Android Lint
+      - name: Run Android Lint
+        run: ./gradlew lintDebug
+        continue-on-error: true  # Lint warnings не прервут сборку
+
+      # Шаг 9: (Опционально) Загрузка артефактов
+      - name: Upload reports
+        uses: actions/upload-artifact@v4
+        if: always()  # Загружаем отчеты даже при неудачной сборке
+        with:
+          name: reports
+          path: |
+            app/build/reports/
+          retention-days: 7
